@@ -1,0 +1,13 @@
+diff --git a/drivers/net/wireless/ath/ath9k/dynack.c b/drivers/net/wireless/ath/ath9k/dynack.c
+index c244dd15dce4..5d5809d160af 100644
+--- a/drivers/net/wireless/ath/ath9k/dynack.c
++++ b/drivers/net/wireless/ath/ath9k/dynack.c
+@@ -338,7 +338,7 @@ void ath_dynack_reset(struct ath_hw *ah)
+ 	u32 ackto = 9 + 16 + 64;
+ 	struct ath_dynack *da = &ah->dynack;
+ 
+-	da->lto = jiffies;
++	da->lto = jiffies + COMPUTE_TO;
+ 	da->ackto = ackto;
+ 
+ 	da->st_rbf.t_rb = 0;

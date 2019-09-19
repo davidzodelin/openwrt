@@ -1,0 +1,51 @@
+Index: backports-5.3-rc4-1/drivers/net/wireless/ath/ath9k/htc.h
+===================================================================
+--- backports-5.3-rc4-1.orig/drivers/net/wireless/ath/ath9k/htc.h
++++ backports-5.3-rc4-1/drivers/net/wireless/ath/ath9k/htc.h
+@@ -197,8 +197,8 @@ struct ath9k_htc_target_rx_stats {
+ 	__be32 host_done;
+ } __packed;
+ 
+-#define ATH9K_HTC_MAX_VIF 2
+-#define ATH9K_HTC_MAX_BCN_VIF 2
++#define ATH9K_HTC_MAX_VIF 8
++#define ATH9K_HTC_MAX_BCN_VIF 8
+ 
+ #define INC_VIF(_priv, _type) do {		\
+ 		switch (_type) {		\
+@@ -251,8 +251,8 @@ struct ath9k_vif_iter_data {
+ 	u8 mask[ETH_ALEN];
+ };
+ 
+-#define ATH9K_HTC_MAX_STA 8
+-#define ATH9K_HTC_MAX_TID 8
++#define ATH9K_HTC_MAX_STA 128
++#define ATH9K_HTC_MAX_TID 16
+ 
+ enum tid_aggr_state {
+ 	AGGR_STOP = 0,
+Index: backports-5.3-rc4-1/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+===================================================================
+--- backports-5.3-rc4-1.orig/drivers/net/wireless/ath/ath9k/htc_drv_init.c
++++ backports-5.3-rc4-1/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+@@ -697,9 +697,9 @@ err_hw:
+ }
+ 
+ static const struct ieee80211_iface_limit if_limits[] = {
+-	{ .max = 2,	.types = BIT(NL80211_IFTYPE_STATION) |
++	{ .max = 8,	.types = BIT(NL80211_IFTYPE_STATION) |
+ 				 BIT(NL80211_IFTYPE_P2P_CLIENT) },
+-	{ .max = 2,	.types = BIT(NL80211_IFTYPE_AP) |
++	{ .max = 8,	.types = BIT(NL80211_IFTYPE_AP) |
+ #ifdef CPTCFG_MAC80211_MESH
+ 				 BIT(NL80211_IFTYPE_MESH_POINT) |
+ #endif
+@@ -709,7 +709,7 @@ static const struct ieee80211_iface_limi
+ static const struct ieee80211_iface_combination if_comb = {
+ 	.limits = if_limits,
+ 	.n_limits = ARRAY_SIZE(if_limits),
+-	.max_interfaces = 2,
++	.max_interfaces = 8,
+ 	.num_different_channels = 1,
+ };
+ 

@@ -1742,6 +1742,7 @@ CONFIG_ZABBIX_POSTGRESQL=y
 # CONFIG_PACKAGE_libertas-spi-firmware is not set
 # CONFIG_PACKAGE_libertas-usb-firmware is not set
 # CONFIG_PACKAGE_mt7601u-firmware is not set
+CONFIG_PACKAGE_mt7622bt-firmware=m
 # CONFIG_PACKAGE_mwifiex-pcie-firmware is not set
 # CONFIG_PACKAGE_mwifiex-sdio-firmware is not set
 # CONFIG_PACKAGE_mwl8k-firmware is not set
@@ -1833,6 +1834,7 @@ CONFIG_PACKAGE_kmod-dax=y
 #
 CONFIG_PACKAGE_kmod-crypto-acompress=y
 CONFIG_PACKAGE_kmod-crypto-aead=y
+CONFIG_PACKAGE_kmod-crypto-arc4=m
 CONFIG_PACKAGE_kmod-crypto-authenc=y
 CONFIG_PACKAGE_kmod-crypto-cbc=y
 CONFIG_PACKAGE_kmod-crypto-ccm=y
@@ -1964,6 +1966,7 @@ CONFIG_PACKAGE_kmod-i2c-mux=y
 CONFIG_PACKAGE_kmod-i2c-mux-gpio=y
 CONFIG_PACKAGE_kmod-i2c-mux-pca9541=y
 CONFIG_PACKAGE_kmod-i2c-mux-pca954x=y
+CONFIG_PACKAGE_kmod-i2c-pxa=m
 CONFIG_PACKAGE_kmod-i2c-smbus=y
 CONFIG_PACKAGE_kmod-i2c-tiny-usb=y
 
@@ -2673,7 +2676,7 @@ CONFIG_PACKAGE_lua=y
 # CONFIG_PACKAGE_pyserial is not set
 # CONFIG_PACKAGE_python is not set
 # CONFIG_PACKAGE_python-asn1crypto is not set
-CONFIG_PACKAGE_python-asn1crypto-src=m
+# CONFIG_PACKAGE_python-asn1crypto-src is not set
 # CONFIG_PACKAGE_python-astral is not set
 # CONFIG_PACKAGE_python-astral-src is not set
 # CONFIG_PACKAGE_python-attrs is not set
@@ -2747,7 +2750,7 @@ CONFIG_PACKAGE_python-asn1crypto-src=m
 # CONFIG_PACKAGE_python-et_xmlfile is not set
 # CONFIG_PACKAGE_python-et_xmlfile-src is not set
 # CONFIG_PACKAGE_python-evdev is not set
-CONFIG_PACKAGE_python-evdev-src=m
+# CONFIG_PACKAGE_python-evdev-src is not set
 # CONFIG_PACKAGE_python-event is not set
 # CONFIG_PACKAGE_python-flup is not set
 # CONFIG_PACKAGE_python-flup-src is not set
@@ -2787,7 +2790,7 @@ CONFIG_PACKAGE_python-evdev-src=m
 # CONFIG_PACKAGE_python-logging is not set
 # CONFIG_PACKAGE_python-logging-src is not set
 # CONFIG_PACKAGE_python-lxml is not set
-CONFIG_PACKAGE_python-lxml-src=m
+# CONFIG_PACKAGE_python-lxml-src is not set
 # CONFIG_PACKAGE_python-mimms is not set
 # CONFIG_PACKAGE_python-multiprocessing is not set
 # CONFIG_PACKAGE_python-multiprocessing-src is not set
@@ -2894,7 +2897,7 @@ CONFIG_PACKAGE_python-lxml-src=m
 # CONFIG_PACKAGE_python3-appdirs is not set
 # CONFIG_PACKAGE_python3-appdirs-src is not set
 # CONFIG_PACKAGE_python3-asn1crypto is not set
-CONFIG_PACKAGE_python3-asn1crypto-src=m
+# CONFIG_PACKAGE_python3-asn1crypto-src is not set
 # CONFIG_PACKAGE_python3-astral is not set
 # CONFIG_PACKAGE_python3-astral-src is not set
 # CONFIG_PACKAGE_python3-async-timeout is not set
@@ -2975,7 +2978,7 @@ CONFIG_PACKAGE_python3-asn1crypto-src=m
 # CONFIG_PACKAGE_python3-et_xmlfile is not set
 # CONFIG_PACKAGE_python3-et_xmlfile-src is not set
 # CONFIG_PACKAGE_python3-evdev is not set
-CONFIG_PACKAGE_python3-evdev-src=m
+# CONFIG_PACKAGE_python3-evdev-src is not set
 # CONFIG_PACKAGE_python3-flask is not set
 # CONFIG_PACKAGE_python3-flup is not set
 # CONFIG_PACKAGE_python3-flup-src is not set
@@ -3016,7 +3019,7 @@ CONFIG_PACKAGE_python3-evdev-src=m
 # CONFIG_PACKAGE_python3-logging is not set
 # CONFIG_PACKAGE_python3-logging-src is not set
 # CONFIG_PACKAGE_python3-lxml is not set
-CONFIG_PACKAGE_python3-lxml-src=m
+# CONFIG_PACKAGE_python3-lxml-src is not set
 # CONFIG_PACKAGE_python3-lzma is not set
 # CONFIG_PACKAGE_python3-lzma-src is not set
 # CONFIG_PACKAGE_python3-markupsafe is not set
@@ -3163,9 +3166,9 @@ CONFIG_PACKAGE_python3-lxml-src=m
 #
 # Compression
 #
-CONFIG_PACKAGE_libbz2=m
+# CONFIG_PACKAGE_libbz2 is not set
 # CONFIG_PACKAGE_liblz4 is not set
-CONFIG_PACKAGE_liblzma=m
+# CONFIG_PACKAGE_liblzma is not set
 # CONFIG_PACKAGE_libunrar is not set
 # CONFIG_PACKAGE_libzstd is not set
 
@@ -4090,22 +4093,7 @@ CONFIG_PACKAGE_libunbound-heavy=y
 #
 # CONFIG_PACKAGE_libaxtls is not set
 # CONFIG_PACKAGE_libbotan is not set
-CONFIG_PACKAGE_libgnutls=m
-
-#
-# Configuration
-#
-CONFIG_GNUTLS_DTLS_SRTP=y
-CONFIG_GNUTLS_ALPN=y
-CONFIG_GNUTLS_OCSP=y
-# CONFIG_GNUTLS_CRYPTODEV is not set
-CONFIG_GNUTLS_HEARTBEAT=y
-# CONFIG_GNUTLS_SRP is not set
-CONFIG_GNUTLS_PSK=y
-CONFIG_GNUTLS_ANON=y
-# CONFIG_GNUTLS_TPM is not set
-# CONFIG_GNUTLS_PKCS11 is not set
-# CONFIG_GNUTLS_EXT_LIBTASN1 is not set
+# CONFIG_PACKAGE_libgnutls is not set
 # CONFIG_PACKAGE_libmatrixssl is not set
 # CONFIG_PACKAGE_libmbedtls is not set
 # CONFIG_PACKAGE_libnss is not set
@@ -4132,7 +4120,6 @@ CONFIG_OPENSSL_WITH_CMS=y
 #
 # Algorithm Selection
 #
-CONFIG_OPENSSL_WITH_EC=y
 CONFIG_OPENSSL_WITH_EC2M=y
 CONFIG_OPENSSL_WITH_CHACHA_POLY1305=y
 CONFIG_OPENSSL_PREFER_CHACHA_OVER_GCM=y
@@ -4250,7 +4237,7 @@ CONFIG_PACKAGE_bind-libs=y
 # CONFIG_PACKAGE_libapr is not set
 # CONFIG_PACKAGE_libaprutil is not set
 # CONFIG_PACKAGE_libarchive is not set
-CONFIG_PACKAGE_libarchive-noopenssl=m
+# CONFIG_PACKAGE_libarchive-noopenssl is not set
 # CONFIG_PACKAGE_libart is not set
 # CONFIG_PACKAGE_libartnet is not set
 # CONFIG_PACKAGE_libasm is not set
@@ -5005,13 +4992,13 @@ CONFIG_PACKAGE_luci-i18n-unbound-zh-tw=m
 # CONFIG_PACKAGE_mailsend is not set
 # CONFIG_PACKAGE_mailsend-nossl is not set
 # CONFIG_PACKAGE_mini-sendmail is not set
-CONFIG_PACKAGE_msmtp=m
-CONFIG_PACKAGE_msmtp-mta=m
+# CONFIG_PACKAGE_msmtp is not set
+# CONFIG_PACKAGE_msmtp-mta is not set
 # CONFIG_PACKAGE_msmtp-nossl is not set
-CONFIG_PACKAGE_msmtp-queue=m
-CONFIG_PACKAGE_msmtpq-ng=m
-CONFIG_PACKAGE_msmtpq-ng-mta=m
-CONFIG_PACKAGE_msmtpq-ng-mta-smtpd=m
+# CONFIG_PACKAGE_msmtp-queue is not set
+# CONFIG_PACKAGE_msmtpq-ng is not set
+# CONFIG_PACKAGE_msmtpq-ng-mta is not set
+# CONFIG_PACKAGE_msmtpq-ng-mta-smtpd is not set
 # CONFIG_PACKAGE_mutt is not set
 # CONFIG_PACKAGE_nail is not set
 # CONFIG_PACKAGE_nullmailer is not set
@@ -5732,7 +5719,6 @@ CONFIG_PACKAGE_ntpclient=y
 # CONFIG_PACKAGE_etherpuppet is not set
 # CONFIG_PACKAGE_fastd is not set
 # CONFIG_PACKAGE_frickin is not set
-# CONFIG_PACKAGE_ipsec-tools is not set
 # CONFIG_PACKAGE_isakmpd is not set
 # CONFIG_PACKAGE_l2tpd is not set
 # CONFIG_PACKAGE_l2tpns is not set
@@ -5743,7 +5729,6 @@ CONFIG_PACKAGE_ntpclient=y
 # CONFIG_PACKAGE_openconnect is not set
 # CONFIG_PACKAGE_openl2tp-full is not set
 # CONFIG_PACKAGE_openl2tp-mini is not set
-# CONFIG_PACKAGE_opennhrp is not set
 # CONFIG_PACKAGE_openswan is not set
 # CONFIG_PACKAGE_openvpn-easy-rsa is not set
 # CONFIG_PACKAGE_openvpn-mbedtls is not set
@@ -6303,7 +6288,7 @@ CONFIG_PACKAGE_wpa-supplicant-openssl=y
 # CONFIG_PACKAGE_wprobe-export is not set
 # CONFIG_PACKAGE_wprobe-util is not set
 # CONFIG_PACKAGE_wwan is not set
-CONFIG_PACKAGE_xinetd=m
+# CONFIG_PACKAGE_xinetd is not set
 
 #
 # Sound
@@ -6385,7 +6370,7 @@ CONFIG_PACKAGE_uboot-envtools=y
 # Compression
 #
 # CONFIG_PACKAGE_bsdtar is not set
-CONFIG_PACKAGE_bsdtar-noopenssl=m
+# CONFIG_PACKAGE_bsdtar-noopenssl is not set
 # CONFIG_PACKAGE_bzip2 is not set
 # CONFIG_PACKAGE_lz4 is not set
 # CONFIG_PACKAGE_unrar is not set
@@ -6527,7 +6512,7 @@ CONFIG_PACKAGE_nano=y
 #
 # Shells
 #
-CONFIG_PACKAGE_bash=m
+# CONFIG_PACKAGE_bash is not set
 # CONFIG_PACKAGE_fish is not set
 # CONFIG_PACKAGE_mksh is not set
 # CONFIG_PACKAGE_tcsh is not set
@@ -6706,6 +6691,7 @@ CONFIG_PACKAGE_bash=m
 # CONFIG_PACKAGE_gawk is not set
 # CONFIG_PACKAGE_gddrescue is not set
 # CONFIG_PACKAGE_getopt is not set
+CONFIG_PACKAGE_giflib-utils=m
 # CONFIG_PACKAGE_gkermit is not set
 # CONFIG_PACKAGE_gnokii is not set
 # CONFIG_PACKAGE_gnuplot is not set
