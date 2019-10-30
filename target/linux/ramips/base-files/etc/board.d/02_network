@@ -234,6 +234,7 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"0:lan" "1:wan" "6@eth0"
 		;;
+	asus,rt-ac65p|\
 	asus,rt-ac85p|\
 	dlink,dir-860l-b1|\
 	elecom,wrc-1167ghbk2-s|\
@@ -296,7 +297,8 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"4:lan" "6@eth0"
 		;;
-	cudy,wr1000)
+	cudy,wr1000|\
+	xiaomi,mir3g-v2)
 		ucidef_add_switch "switch0" \
 			"2:lan:2" "3:lan:1" "4:wan" "6@eth0"
 		;;
@@ -562,6 +564,7 @@ ramips_setup_macs()
 	zbtlink,zbt-we3526)
 		wan_mac=$(mtd_get_mac_binary factory 0xe006)
 		;;
+	asus,rt-ac65p|\
 	asus,rt-ac85p)
 		wan_mac=$(mtd_get_mac_ascii u-boot-env et1macaddr)
 		label_mac=$(cat /sys/class/ieee80211/phy0/macaddress)
@@ -717,6 +720,10 @@ ramips_setup_macs()
 		;;
 	xiaomi,mir3g)
 		lan_mac=$(mtd_get_mac_binary factory 0xe006)
+		;;
+	xiaomi,mir3g-v2)
+		wan_mac=$(mtd_get_mac_binary factory 0xe006)
+		label_mac=$wan_mac
 		;;
 	xiaomi,mir3p)
 		lan_mac=$(mtd_get_mac_binary factory 0xe006)

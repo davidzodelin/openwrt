@@ -199,7 +199,7 @@ define Device/buffalo_wzr-hp-ag300h
   ATH_SOC := ar7161
   DEVICE_VENDOR := Buffalo
   DEVICE_MODEL := WZR-HP-AG300H
-  IMAGE_SIZE := 32256k
+  IMAGE_SIZE := 32320k
   IMAGES += factory.bin tftp.bin
   IMAGE/default := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
   IMAGE/factory.bin := $$(IMAGE/default) | buffalo-enc WZR-HP-AG300H 1.99 | buffalo-tag WZR-HP-AG300H 3
@@ -549,6 +549,7 @@ TARGET_DEVICES += glinet_gl-ar150
 
 define Device/glinet_gl-ar300m-common-nor
   ATH_SOC := qca9531
+  DEVICE_VENDOR := GL.iNet
   DEVICE_PACKAGES := kmod-usb2
   IMAGE_SIZE := 16000k
   SUPPORTED_DEVICES += gl-ar300m
@@ -556,14 +557,13 @@ endef
 
 define Device/glinet_gl-ar300m-lite
   $(Device/glinet_gl-ar300m-common-nor)
-  DEVICE_VENDOR := GL.iNet
-  DEVICE_MODEL := GL-AR300M-Lite
+  DEVICE_MODEL := GL-AR300M
+  DEVICE_VARIANT := Lite
 endef
 TARGET_DEVICES += glinet_gl-ar300m-lite
 
 define Device/glinet_gl-ar300m-nor
   $(Device/glinet_gl-ar300m-common-nor)
-  DEVICE_VENDOR := GL.iNet
   DEVICE_MODEL := GL-AR300M
 endef
 TARGET_DEVICES += glinet_gl-ar300m-nor

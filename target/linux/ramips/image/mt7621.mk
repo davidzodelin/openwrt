@@ -125,6 +125,22 @@ define Device/asus_rt-ac57u
 endef
 TARGET_DEVICES += asus_rt-ac57u
 
+define Device/asus_rt-ac65p
+  MTK_SOC := mt7621
+  DEVICE_VENDOR := ASUS
+  DEVICE_MODEL := RT-AC65P
+  IMAGE_SIZE := 51200k
+  UBINIZE_OPTS := -E 5
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  KERNEL_SIZE := 4096k
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+  DEVICE_PACKAGES := kmod-usb3 kmod-mt7615e wpad-basic uboot-envtools
+endef
+TARGET_DEVICES += asus_rt-ac65p
+
 define Device/asus_rt-ac85p
   MTK_SOC := mt7621
   DEVICE_VENDOR := ASUS
@@ -746,6 +762,19 @@ define Device/xiaomi_mir3g
 	uboot-envtools
 endef
 TARGET_DEVICES += xiaomi_mir3g
+
+define Device/xiaomi_mir3g-v2
+  MTK_SOC := mt7621
+  IMAGE_SIZE := 14848k
+  DEVICE_VENDOR := Xiaomi
+  DEVICE_MODEL := Mi Router 3G
+  DEVICE_VARIANT := v2
+  DEVICE_ALT0_VENDOR := Xiaomi
+  DEVICE_ALT0_MODEL := Mi Router 4A
+  DEVICE_ALT0_VARIANT := Gigabit Edition
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 wpad-basic
+endef
+TARGET_DEVICES += xiaomi_mir3g-v2
 
 define Device/xiaomi_mir3p
   MTK_SOC := mt7621
