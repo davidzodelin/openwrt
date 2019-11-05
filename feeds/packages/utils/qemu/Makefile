@@ -293,20 +293,20 @@ CONFIGURE_ARGS +=			\
 
 # Image formats support
 CONFIGURE_ARGS +=			\
-	--enable-bochs			\
-	--enable-cloop			\
-	--enable-dmg			\
-	--enable-qcow1			\
-	--enable-vdi			\
-	--enable-vvfat			\
-	--enable-qed			\
-	--enable-parallels		\
+	--disable-bochs			\
+	--disable-cloop			\
+	--disable-dmg			\
+	--disable-qcow1			\
+	--disable-vdi			\
+	--disable-vvfat			\
+	--disable-qed			\
+	--disable-parallels		\
 
 # system/user-mode emulation
 CONFIGURE_ARGS +=			\
-	--enable-user			\
-	--enable-bsd-user		\
-	--enable-linux-user		\
+	--disable-user			\
+	--disable-bsd-user		\
+	--disable-linux-user		\
 	--enable-system			\
 
 # accel
@@ -326,17 +326,10 @@ CONFIGURE_ARGS +=			\
 	--disable-sdl-image		\
 	--$(if $(CONFIG_QEMU_UI_SPICE),enable,disable)-spice			\
 	--disable-virglrenderer		\
-<<<<<<< HEAD
-	--enable-vnc			\
-	--disable-vnc-jpeg		\
-	--disable-vnc-png		\
-	--disable-vnc-sasl		\
-=======
 	--$(if $(CONFIG_QEMU_UI_VNC),enable,disable)-vnc			\
 	--$(if $(CONFIG_QEMU_UI_VNC_JPEG),enable,disable)-vnc-jpeg		\
 	--$(if $(CONFIG_QEMU_UI_VNC_PNG),enable,disable)-vnc-png		\
 	--$(if $(CONFIG_QEMU_UI_VNC_SASL),enable,disable)-vnc-sasl		\
->>>>>>> fb54e9c22bbeb2d3058506e5b10cc09d404e0737
 	--disable-vte			\
 	--enable-curses			\
 	--enable-iconv			\
@@ -367,9 +360,9 @@ CONFIGURE_ARGS +=			\
 	--disable-cap-ng		\
 	--disable-capstone		\
 	--disable-curl			\
-	--enable-debug-info		\
-	--enable-debug-mutex		\
-	--enable-debug-tcg		\
+	--disable-debug-info		\
+	--disable-debug-mutex		\
+	--disable-debug-tcg		\
 	--disable-docs			\
 	--disable-gcrypt		\
 	--disable-git-update		\
@@ -381,13 +374,13 @@ CONFIGURE_ARGS +=			\
 	--disable-libnfs		\
 	--disable-libpmem		\
 	--disable-libssh		\
-	--enable-libudev		\
+	--disable-libudev		\
 	--disable-libusb		\
-	--enable-libxml2		\
+	--disable-libxml2		\
 	--disable-linux-aio		\
 	--disable-lzfse			\
 	--disable-lzo			\
-	--enable-modules		\
+	--disable-modules		\
 	--disable-mpath			\
 	--disable-netmap		\
 	--disable-nettle		\

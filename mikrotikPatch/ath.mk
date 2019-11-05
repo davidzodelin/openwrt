@@ -211,7 +211,7 @@ define KernelPackage/ath9k/config
 	config ATH9K_HWRNG
 		bool "Add wireless noise as source of randomness to kernel entropy pool"
 		depends on PACKAGE_kmod-ath9k && PACKAGE_kmod-random-core
-		default y
+		default n
 
 	config ATH9K_SUPPORT_PCOEM
 		bool "Support chips used in PC OEM cards"
