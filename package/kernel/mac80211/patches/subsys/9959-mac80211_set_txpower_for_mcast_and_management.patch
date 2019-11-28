@@ -1,0 +1,14 @@
+Index: backports-5.4-rc8-1/net/mac80211/rate.c
+===================================================================
+--- backports-5.4-rc8-1.orig/net/mac80211/rate.c
++++ backports-5.4-rc8-1/net/mac80211/rate.c
+@@ -399,6 +399,9 @@ static bool rate_control_send_low(struct
+ 					      txrc->bss_conf->basic_rates,
+ 					      sband);
+ 
++		/* Send management & multicast packets at max user power */
++		info->control.txpower = txrc->hw->conf.power_level;
++
+ 		return true;
+ 	}
+ 	return false;

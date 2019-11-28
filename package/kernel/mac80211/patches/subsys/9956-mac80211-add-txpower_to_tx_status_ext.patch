@@ -1,0 +1,12 @@
+Index: backports-5.4-rc8-1/include/net/mac80211.h
+===================================================================
+--- backports-5.4-rc8-1.orig/include/net/mac80211.h
++++ backports-5.4-rc8-1/include/net/mac80211.h
+@@ -1076,6 +1076,7 @@ struct ieee80211_tx_status {
+ 	struct ieee80211_tx_info *info;
+ 	struct sk_buff *skb;
+ 	struct rate_info *rate;
++	s8 txpower[IEEE80211_TX_MAX_RATES];
+ };
+ 
+ /**

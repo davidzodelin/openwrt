@@ -1,0 +1,177 @@
+Index: backports-5.4-rc8-1/include/net/mac80211.h
+===================================================================
+--- backports-5.4-rc8-1.orig/include/net/mac80211.h
++++ backports-5.4-rc8-1/include/net/mac80211.h
+@@ -1021,7 +1021,12 @@ struct ieee80211_tx_info {
+ 					u8 use_cts_prot:1;
+ 					u8 short_preamble:1;
+ 					u8 skip_table:1;
+-					/* 2 bytes free */
++
++					/* txpower field refers to the first
++					 * entry of rates only (if present).
++					 */
++					s8 txpower;
++					/* 1 byte free */
+ 				};
+ 				/* only needed before rate control */
+ 				unsigned long jiffies;
+@@ -1446,6 +1451,7 @@ enum ieee80211_conf_changed {
+ 	IEEE80211_CONF_CHANGE_CHANNEL		= BIT(6),
+ 	IEEE80211_CONF_CHANGE_RETRY_LIMITS	= BIT(7),
+ 	IEEE80211_CONF_CHANGE_IDLE		= BIT(8),
++	IEEE80211_CONF_CHANGE_ACK_TXPOWER	= BIT(9),
+ };
+ 
+ /**
+@@ -1515,6 +1521,8 @@ struct ieee80211_conf {
+ 	struct cfg80211_chan_def chandef;
+ 	bool radar_enabled;
+ 	enum ieee80211_smps_mode smps_mode;
++	s8 min_txpower;
++	s8 ack_txpower;
+ };
+ 
+ /**
+@@ -1900,6 +1908,7 @@ struct ieee80211_sta_rates {
+ 	struct rcu_head rcu_head;
+ 	struct {
+ 		s8 idx;
++		s8 txpower;
+ 		u8 count;
+ 		u8 count_cts;
+ 		u8 count_rts;
+@@ -2338,6 +2347,9 @@ enum ieee80211_hw_flags {
+ 	IEEE80211_HW_SUPPORTS_MULTI_BSSID,
+ 	IEEE80211_HW_SUPPORTS_ONLY_HE_MULTI_BSSID,
+ 	IEEE80211_HW_AMPDU_KEYBORDER_SUPPORT,
++	IEEE80211_HW_SUPPORTS_TPC_PER_PACKET,
++	IEEE80211_HW_SUPPORTS_TPC_PER_MRR,
++	IEEE80211_HW_SUPPORTS_TPC_FOR_ACK_PACKETS,
+ 
+ 	/* keep last, obviously */
+ 	NUM_IEEE80211_HW_FLAGS
+@@ -2502,6 +2514,7 @@ struct ieee80211_hw {
+ 	u8 n_cipher_schemes;
+ 	const struct ieee80211_cipher_scheme *cipher_schemes;
+ 	u8 max_nan_de_entries;
++	s8 min_txpower;
+ 	u8 tx_sk_pacing_shift;
+ 	u8 weight_multiplier;
+ 	u32 max_mtu;
+Index: backports-5.4-rc8-1/net/mac80211/debugfs.c
+===================================================================
+--- backports-5.4-rc8-1.orig/net/mac80211/debugfs.c
++++ backports-5.4-rc8-1/net/mac80211/debugfs.c
+@@ -272,6 +272,9 @@ static const char *hw_flag_names[] = {
+ 	FLAG(SUPPORTS_MULTI_BSSID),
+ 	FLAG(SUPPORTS_ONLY_HE_MULTI_BSSID),
+ 	FLAG(AMPDU_KEYBORDER_SUPPORT),
++	FLAG(SUPPORTS_TPC_PER_PACKET),
++	FLAG(SUPPORTS_TPC_PER_MRR),
++	FLAG(SUPPORTS_TPC_FOR_ACK_PACKETS),
+ #undef FLAG
+ };
+ 
+Index: backports-5.4-rc8-1/net/mac80211/main.c
+===================================================================
+--- backports-5.4-rc8-1.orig/net/mac80211/main.c
++++ backports-5.4-rc8-1/net/mac80211/main.c
+@@ -159,6 +159,7 @@ static u32 ieee80211_hw_conf_chan(struct
+ 	if (local->hw.conf.power_level != power) {
+ 		changed |= IEEE80211_CONF_CHANGE_POWER;
+ 		local->hw.conf.power_level = power;
++		local->hw.conf.ack_txpower = power;
+ 	}
+ 
+ 	return changed;
+@@ -1181,6 +1182,12 @@ int ieee80211_register_hw(struct ieee802
+ 
+ 	local->dynamic_ps_forced_timeout = -1;
+ 
++	/*
++	 * if the driver doesn't specify a min txpower we
++	 * use 0dBm which should be a safe default
++	 */
++	local->hw.conf.min_txpower = local->hw.min_txpower = 0;
++
+ 	if (!local->hw.max_nan_de_entries)
+ 		local->hw.max_nan_de_entries = IEEE80211_MAX_NAN_INSTANCE_ID;
+ 
+Index: backports-5.4-rc8-1/net/mac80211/rate.c
+===================================================================
+--- backports-5.4-rc8-1.orig/net/mac80211/rate.c
++++ backports-5.4-rc8-1/net/mac80211/rate.c
+@@ -891,6 +891,8 @@ void rate_control_get_rate(struct ieee80
+ 		info->control.rates[i].count = 0;
+ 	}
+ 
++	info->control.txpower = sdata->vif.bss_conf.txpower;
++
+ 	if (rate_control_send_low(sta ? &sta->sta : NULL, txrc))
+ 		return;
+ 
+Index: backports-5.4-rc8-1/net/mac80211/rc80211_minstrel.c
+===================================================================
+--- backports-5.4-rc8-1.orig/net/mac80211/rc80211_minstrel.c
++++ backports-5.4-rc8-1/net/mac80211/rc80211_minstrel.c
+@@ -52,6 +52,7 @@
+ #include <linux/ieee80211.h>
+ #include <linux/slab.h>
+ #include <net/mac80211.h>
++#include "sta_info.h"
+ #include "rate.h"
+ #include "rc80211_minstrel.h"
+ 
+@@ -125,12 +126,21 @@ static void
+ minstrel_update_rates(struct minstrel_priv *mp, struct minstrel_sta_info *mi)
+ {
+ 	struct ieee80211_sta_rates *ratetbl;
++	struct sta_info *sta;
++	s8 txpower;
+ 	int i = 0;
+ 
++	sta = container_of(mi->sta, struct sta_info, sta);
++	txpower = sta->sdata->vif.bss_conf.txpower;
++
+ 	ratetbl = kzalloc(sizeof(*ratetbl), GFP_ATOMIC);
+ 	if (!ratetbl)
+ 		return;
+ 
++	for (i = 0; i < ARRAY_SIZE(ratetbl->rate); i++)
++		ratetbl->rate[i].txpower = txpower;
++	i = 0;
++
+ 	/* Start with max_tp_rate */
+ 	minstrel_set_rate(mi, ratetbl, i++, mi->max_tp_rate[0]);
+ 
+Index: backports-5.4-rc8-1/net/mac80211/rc80211_minstrel_ht.c
+===================================================================
+--- backports-5.4-rc8-1.orig/net/mac80211/rc80211_minstrel_ht.c
++++ backports-5.4-rc8-1/net/mac80211/rc80211_minstrel_ht.c
+@@ -1201,16 +1201,25 @@ static void
+ minstrel_ht_update_rates(struct minstrel_priv *mp, struct minstrel_ht_sta *mi)
+ {
+ 	struct ieee80211_sta_rates *rates;
++	struct sta_info *sta;
++	s8 txpower;
+ 	u16 first_rate = mi->max_tp_rate[0];
+ 	int i = 0;
+ 
+ 	if (mi->sample_mode == MINSTREL_SAMPLE_ACTIVE)
+ 		first_rate = mi->sample_rate;
+ 
++	sta = container_of(mi->sta, struct sta_info, sta);
++	txpower = sta->sdata->vif.bss_conf.txpower;
++
+ 	rates = kzalloc(sizeof(*rates), GFP_ATOMIC);
+ 	if (!rates)
+ 		return;
+ 
++	for (i = 0; i < ARRAY_SIZE(rates->rate); i++)
++		rates->rate[i].txpower = txpower;
++	i = 0;
++
+ 	/* Start with max_tp_rate[0] */
+ 	minstrel_ht_set_rate(mp, mi, rates, i++, first_rate);
+ 
